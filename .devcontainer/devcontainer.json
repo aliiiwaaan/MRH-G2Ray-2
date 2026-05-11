@@ -13,9 +13,11 @@
     }
   },
   "postAttachCommand": {
-    "public": "gh codespace ports visibility 443:public 8080:public -c $CODESPACE_NAME",
+    "public": "gh codespace ports visibility 443:public 8080:public 8081:public -c $CODESPACE_NAME",
     "xray": "/usr/local/bin/start-xray.sh",
-    "admin": "/usr/local/bin/start-admin.sh"
+    "admin": "/usr/local/bin/start-admin.sh",
+    "api": "nohup /usr/local/bin/api-server.sh &",
+    "idle": "nohup /usr/local/bin/idle-monitor.sh &"
   },
   "portsAttributes": {
     "443": {
@@ -27,9 +29,14 @@
       "label": "admin-gui",
       "protocol": "http",
       "onAutoForward": "openBrowser"
+    },
+    "8081": {
+      "label": "api-link",
+      "protocol": "http",
+      "onAutoForward": "silent"
     }
   },
-  "forwardPorts": [443, 8080],
+  "forwardPorts": [443, 8080, 8081],
   "hostRequirements": {
     "cpus": 2
   }
