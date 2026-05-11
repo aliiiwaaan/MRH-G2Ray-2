@@ -4,15 +4,19 @@ COPY install.sh /app/install.sh
 COPY start-xray.sh /usr/local/bin/start-xray.sh
 COPY start-admin.sh /usr/local/bin/start-admin.sh
 COPY mrh-admin-server.py /usr/local/bin/mrh-admin-server.py
+COPY api-server.sh /usr/local/bin/api-server.sh
+COPY idle-monitor.sh /usr/local/bin/idle-monitor.sh
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash git curl wget unzip tzdata openssl ca-certificates python3 \
+    netcat-openbsd jq \
     && rm -rf /var/lib/apt/lists/*
 
 RUN chmod +x /app/install.sh && /app/install.sh
-RUN chmod +x /usr/local/bin/start-xray.sh /usr/local/bin/start-admin.sh /usr/local/bin/mrh-admin-server.py
+RUN chmod +x /usr/local/bin/start-xray.sh /usr/local/bin/start-admin.sh /usr/local/bin/mrh-admin-server.py \
+    /usr/local/bin/api-server.sh /usr/local/bin/idle-monitor.sh
 COPY config.json /etc/config.json
 COPY admin /opt/mrh-admin
 
