@@ -29,12 +29,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           echo "🔍 در حال جستجوی لینک VLESS در خروجی کداسپیس..."
-          MAX_WAIT=300   # حداکثر ۵ دقیقه صبر کن
-          INTERVAL=10    # هر ۱۰ ثانیه یکبار چک کن
+          MAX_WAIT=300
+          INTERVAL=10
           ELAPSED=0
           VLESS_LINK=""
           while [ $ELAPSED -lt $MAX_WAIT ]; do
-            # لاگ کداسپیس را بگیر و لینک را جستجو کن
             VLESS_LINK=$(gh codespace logs -c ${{ env.CODESPACE_NAME }} 2>&1 | grep -oE 'vless://[^ ]+' | head -1)
             if [ -n "$VLESS_LINK" ]; then
               echo "✅ لینک پیدا شد بعد از ${ELAPSED} ثانیه."
@@ -72,4 +71,4 @@ jobs:
 
       - name: نگه داشتن کداسپیس فعال
         run: |
-          echo "✅ کداسپیس فعال نگه داشته شد. تا زمانی که خودتان آن را متوقف نکنید یا Idle Monitor آن را متوقف کند، روشن می‌ماند."
+          echo "✅ کداسپیس فعال نگه داشته شد."
