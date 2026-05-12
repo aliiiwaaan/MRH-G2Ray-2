@@ -1,7 +1,7 @@
 {
-  "name": "ghtun",
+  "name": "g2ray1",
   "build": {
-    "dockerfile": "./Dockerfile",
+    "dockerfile": "Dockerfile",
     "context": "."
   },
   "features": {
@@ -12,24 +12,17 @@
       "version": "latest"
     }
   },
-  "postAttachCommand": {
-    "public": "gh codespace ports visibility 443:public 8080:public -c $CODESPACE_NAME",
-    "xray": "/usr/local/bin/start-xray.sh",
-    "admin": "/usr/local/bin/start-admin.sh"
-  },
+  "postAttachCommand": "gh codespace ports visibility 443:public -c $CODESPACE_NAME && bash /usr/local/bin/start.sh",
   "portsAttributes": {
     "443": {
-      "label": "xray",
+      "label": "g2ray1",
       "protocol": "http",
       "onAutoForward": "silent"
-    },
-    "8080": {
-      "label": "admin-gui",
-      "protocol": "http",
-      "onAutoForward": "openBrowser"
     }
   },
-  "forwardPorts": [443, 8080],
+  "forwardPorts": [
+    443
+  ],
   "hostRequirements": {
     "cpus": 2
   }
