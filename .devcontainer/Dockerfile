@@ -1,19 +1,17 @@
 FROM debian:bookworm-slim
-
-COPY install.sh /app/install.sh
-COPY start-xray.sh /usr/local/bin/start-xray.sh
-COPY start-admin.sh /usr/local/bin/start-admin.sh
-COPY mrh-admin-server.py /usr/local/bin/mrh-admin-server.py
-
-WORKDIR /app
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash git curl wget unzip tzdata openssl ca-certificates python3 \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN chmod +x /app/install.sh && /app/install.sh
-RUN chmod +x /usr/local/bin/start-xray.sh /usr/local/bin/start-admin.sh /usr/local/bin/mrh-admin-server.py
-COPY config.json /etc/config.json
-COPY admin /opt/mrh-admin
-
-CMD ["/bin/sh", "-lc", "/usr/local/bin/start-xray.sh && tail -f /tmp/xray.log"]
+COPY setup.sh /tmp/setup.sh
+COPY config.json /etc/xray/g2ray.json
+COPY show-link.sh /usr/local/bin/show-link.sh
+COPY start.sh /usr/local/bin/start.sh
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       bash curl wget unzip ca-certificates openssl uuid-runtime tmux \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /etc/xray \
+    && chmod +x /tmp/setup.sh \
+    && /tmp/setup.sh \
+    && rm /tmp/setup.sh \
+    && chmod +x /usr/local/bin/show-link.sh \
+    && chmod +x /usr/local/bin/start.sh
+EXPOSE 443
+CMD ["/usr/local/bin/xray","run","-c","/etc/xray/g2ray.json"]
